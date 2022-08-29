@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.nti.module_returnoutbound">
+
+    <application>
+        <activity android:name=".activity.ReturnoutboundDetailActivity"></activity>
+        <activity android:name=".activity.ReturnoutboundActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+    </application>
+
+</manifest>

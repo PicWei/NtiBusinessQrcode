@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">lib_common</string>
+    <string name="sumbit_expection">上传失败</string>
+</resources>
