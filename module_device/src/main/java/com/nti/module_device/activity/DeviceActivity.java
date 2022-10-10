@@ -43,10 +43,10 @@ public class DeviceActivity extends BaseActivity {
     private DeviceViewModel viewModel;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
-    private String SYSTEM_SERVICE_TYPE = "INDUT_SALES_FACTORY";
-    private String[] spinner_item = new String[]{"工业销售出厂", "工业退货入库", "工业移库出库", "工业移库入库",
-                                                 "工业合作生产到货入库", "工业合作生产退货出库", "工业出入库报废",
-                                                 "工业出入库报废补码", "工业仓库损溢"
+    private String SYSTEM_SERVICE_TYPE = "US_CORP_BILL_BASE";
+    private String[] spinner_item = new String[]{"商业到货入库", "商业退货出库", "商业调剂出库", "商业调剂退货入库",
+                                                 "商业移库出库", "商业移库入库", "商业分栋领用出库",
+                                                 "商业分栋领用退回", "商业销售退货入库","卷烟商业损溢"
                                                  };
 
     @Override
@@ -81,30 +81,34 @@ public class DeviceActivity extends BaseActivity {
                 public void onItemSelected(MaterialSpinner materialSpinner, int i, long l, Object o) {
                     switch (i){
                         case 0:
-                            SYSTEM_SERVICE_TYPE = "INDUT_SALES_FACTORY";
+                            SYSTEM_SERVICE_TYPE = "US_CORP_BILL_BASE";
                             break;
                         case 1:
-                            SYSTEM_SERVICE_TYPE = "INDUT_RETURN_TREASURY";
+                            SYSTEM_SERVICE_TYPE = "US_BACK_BILL_BASE";
                             break;
                         case 2:
-                            SYSTEM_SERVICE_TYPE = "INDUT_MOVE_OUTBOUND";
+                            SYSTEM_SERVICE_TYPE = "US_TRANS_BILL_BASE";
                             break;
                         case 3:
-                            SYSTEM_SERVICE_TYPE = "INDUT_MOVE_STORAGE";
+                            SYSTEM_SERVICE_TYPE = "US_TBACK_BILL_BASE";
                             break;
                         case 4:
-                            SYSTEM_SERVICE_TYPE = "INDUT_JOINT_ARRIVAL";
+                            SYSTEM_SERVICE_TYPE = "US_MOVEOUT_BILL_BASE";
                             break;
                         case 5:
-                            SYSTEM_SERVICE_TYPE = "INDUT_COOPERATIVE_RETURN";
+                            SYSTEM_SERVICE_TYPE = "US_MOVEIN_BILL_BASE";
                             break;
                         case 6:
-                            SYSTEM_SERVICE_TYPE = "INDUT_OUT_SCRAP";
+                            SYSTEM_SERVICE_TYPE = "US_SORT_BILL_BASE";
                             break;
                         case 7:
+                            SYSTEM_SERVICE_TYPE = "US_SBACK_BILL_BASE";
                             break;
                         case 8:
-                            SYSTEM_SERVICE_TYPE = "INDUT_WAREHOUSE_EXCESSIVE";
+                            SYSTEM_SERVICE_TYPE = "US_RBACK_BILL_BASE";
+                            break;
+                        case 9:
+                            SYSTEM_SERVICE_TYPE = "US_ADJUST_BILL_BASE";
                             break;
                     }
                 }

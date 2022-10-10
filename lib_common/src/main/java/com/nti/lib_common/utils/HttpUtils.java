@@ -73,10 +73,11 @@ public class HttpUtils {
                         .client(mBuilder.build())
                         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                         .addConverterFactory(GsonConverterFactory.create())
-                        .baseUrl("https://it.nti56.com").build();
+                        .baseUrl("http://10.159.40.216:10010").build();
 
                 //测试服务
-                //http://10.159.40.216:10010/
+                //http://10.159.40.216:10010
+                //https://it.nti56.com
 
         }catch (Exception e){
             e.printStackTrace();

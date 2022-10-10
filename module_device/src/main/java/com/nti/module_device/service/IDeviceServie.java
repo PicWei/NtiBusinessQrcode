@@ -14,7 +14,7 @@ import retrofit2.http.POST;
  * @describe
  */
 public interface IDeviceServie {
-    @POST("/api/fdevelop/tool/front/runtime-server/common/transflow/executeCode/INDUT_PDA_LOGIN01")
+    @POST("/api/fdevelop/tool/front/runtime-server/common/transflow/executeCode/BUSSIN_PDA_LOGIN")
 //    @POST("/common/transflow/executeCode/INDUT_PDA_LOGIN01")
     Observable<JsonObject> register (@Body PdaRegisterParamer paramer);
 }
