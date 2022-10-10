@@ -14,6 +14,8 @@ import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.impl.LoadingPopupView;
 import com.nti.lib_common.activity.BaseActivity;
 import com.nti.lib_common.bean.LossOrderInfo;
+import com.nti.lib_common.bean.DataResult;
+import com.nti.lib_common.bean.LossOrderInfo;
 import com.nti.lib_common.bean.MessageEvent;
 import com.nti.lib_common.bean.LossOrderInfo;
 import com.nti.lib_common.bean.Paramer;
@@ -34,6 +36,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.litepal.LitePal;
 
 import java.util.List;
+
+//商业卷烟损溢 US_ADJUST_BILL_BASE
 @Route(path = ARouterPath.LOSS_PATH)
 public class LossActivity extends BaseActivity implements View.OnClickListener {
 
@@ -41,19 +45,69 @@ public class LossActivity extends BaseActivity implements View.OnClickListener {
     private LossVM viewModel;
     private LoadingPopupView loadingPopup;
     private int current = 1;
-    
+
+    public static final String SYSTEM_SERVICE_TYPE = "US_ADJUST_BILL_BASE";
+
+    String deviceId;
+
+    //未完成
+    private int unFinishCount;
+
+    //进行中
+    private int doingCount;
+
+    //已完成
+    private int finishCount;
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_loss);
         EventBus.getDefault().register(this);
+
+
+        initListener();
+
+        viewModel = new ViewModelProvider(this).get(LossVM.class);
+
+        deviceId = DeviceUtils.getDevUUID(this);
+
+        loadData();
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        loadViewCount();
+        if (current == 1){
+            binding.incompleteCl.performClick();
+        }
+        if (current == 2){
+            binding.ongoingCl.performClick();
+        }
+        if (current == 3){
+            binding.completedCl.performClick();
+        }
+    }
+
+
+    private void initListener() {
         binding.incompleteCl.setOnClickListener(this);
         binding.ongoingCl.setOnClickListener(this);
         binding.completedCl.setOnClickListener(this);
         binding.titleBar.findViewById(R.id.right_cl).setOnClickListener(this);
-        viewModel = new ViewModelProvider(this).get(LossVM.class);
-        String deviceId = DeviceUtils.getDevUUID(this);
-        String SYSTEM_SERVICE_TYPE = "US_ADJUST_BILL_BASE";
+    }
+
+
+    /**
+     * 请求数据
+     */
+    private void loadData() {
         Params params = new Params(deviceId, SYSTEM_SERVICE_TYPE);
         Paramer paramer = new Paramer(params);
         if (loadingPopup == null) {
@@ -65,49 +119,39 @@ public class LossActivity extends BaseActivity implements View.OnClickListener {
         }else {
             loadingPopup.show();
         }
-        viewModel.PDA_H(paramer).observe(this, new Observer<List<LossOrderInfo>>() {
+        viewModel.PDA_H(paramer).observe(this, new Observer<DataResult<List<LossOrderInfo>>>() {
             @Override
-            public void onChanged(List<LossOrderInfo> LossOrderInfos) {
+            public void onChanged(DataResult<List<LossOrderInfo>> dataResult) {
                 loadingPopup.dismiss();
-                if (LossOrderInfos == null){
-                    Toast.makeText(LossActivity.this, "数据为空", Toast.LENGTH_SHORT).show();
+                int errcode = dataResult.getErrcode();
+                if (errcode == -1){
+                    Toast.makeText(LossActivity.this, "网络异常", Toast.LENGTH_SHORT).show();
                 }else {
-                    binding.incompleteCl.performClick();
-                    List<LossOrderInfo> orderInfos = LitePal.where("BB_STATE = ?", "4").find(LossOrderInfo.class);
-                    List<LossOrderInfo> orderInfos2 = LitePal.where("BB_STATE = ?", "1").find(LossOrderInfo.class);
-                    List<LossOrderInfo> orderInfos3 = LitePal.where("BB_STATE = ?", "3").find(LossOrderInfo.class);
-                    int incompleteNum = orderInfos.size();
-                    int ongoingNum = orderInfos2.size();
-                    int completeNUm = orderInfos3.size();
-                    binding.incompleteNum.setText(incompleteNum+"");
-                    binding.ongoingNum.setText(ongoingNum+"");
-                    binding.completedNum.setText(completeNUm+"");
+                    List<LossOrderInfo> LossOrderInfos = dataResult.getT();
+                    if (LossOrderInfos == null || LossOrderInfos.isEmpty()){
+                        Toast.makeText(LossActivity.this, "数据为空", Toast.LENGTH_SHORT).show();
+                    }else {
+                        binding.incompleteCl.performClick();
+                        loadViewCount();
+                    }
                 }
             }
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        List<LossOrderInfo> orderInfos = LitePal.where("BB_STATE = ?", "4").find(LossOrderInfo.class);
-        List<LossOrderInfo> orderInfos2 = LitePal.where("BB_STATE = ?", "1").find(LossOrderInfo.class);
-        List<LossOrderInfo> orderInfos3 = LitePal.where("BB_STATE = ?", "3").find(LossOrderInfo.class);
-        int incompleteNum = orderInfos.size();
-        int ongoingNum = orderInfos2.size();
-        int completeNUm = orderInfos3.size();
-        binding.incompleteNum.setText(incompleteNum+"");
-        binding.ongoingNum.setText(ongoingNum+"");
-        binding.completedNum.setText(completeNUm+"");
-        if (current == 1){
-            binding.incompleteCl.performClick();
-        }
-        if (current == 2){
-            binding.ongoingCl.performClick();
-        }
-        if (current == 3){
-            binding.completedCl.performClick();
-        }
+
+
+    /**
+     * 顶部tab数量
+     */
+    private void loadViewCount() {
+        unFinishCount = LitePal.where("BB_STATE = ?", "4").count(LossOrderInfo.class);
+        doingCount = LitePal.where("BB_STATE = ?", "1").count(LossOrderInfo.class);
+        finishCount = LitePal.where("BB_STATE = ? and PDA_SCANNER_IS_END = ?", "3", "0").count(LossOrderInfo.class);
+
+        binding.incompleteNum.setText(unFinishCount + "");
+        binding.ongoingNum.setText(doingCount + "");
+        binding.completedNum.setText(finishCount + "");
     }
 
     @Override
@@ -128,39 +172,7 @@ public class LossActivity extends BaseActivity implements View.OnClickListener {
             Fragment completedFragment = CompletedFragment.newInstance();
             getSupportFragmentManager().beginTransaction().replace(R.id.container, completedFragment).commit();
         }else if ((view.getId()) == R.id.right_cl){
-            String deviceId = DeviceUtils.getDevUUID(this);
-            String SYSTEM_SERVICE_TYPE = "US_ADJUST_BILL_BASE";
-            Params params = new Params(deviceId, SYSTEM_SERVICE_TYPE);
-            Paramer paramer = new Paramer(params);
-            if (loadingPopup == null) {
-                loadingPopup = (LoadingPopupView)new XPopup.Builder(this)
-                        .dismissOnBackPressed(true)
-                        .isLightNavigationBar(true)
-                        .asLoading("加载中...")
-                        .show();
-            }else {
-                loadingPopup.show();
-            }
-            viewModel.PDA_H(paramer).observe(this, new Observer<List<LossOrderInfo>>() {
-                @Override
-                public void onChanged(List<LossOrderInfo> salesFactoryOrderInfos) {
-                    loadingPopup.dismiss();
-                    if (salesFactoryOrderInfos == null){
-                        Toast.makeText(LossActivity.this, "数据为空", Toast.LENGTH_SHORT).show();
-                    }else {
-                        binding.incompleteCl.performClick();
-                        List<LossOrderInfo> orderInfos = LitePal.where("BB_STATE = ?", "4").find(LossOrderInfo.class);
-                        List<LossOrderInfo> orderInfos2 = LitePal.where("BB_STATE = ?", "1").find(LossOrderInfo.class);
-                        List<LossOrderInfo> orderInfos3 = LitePal.where("BB_STATE = ?", "3").find(LossOrderInfo.class);
-                        int incompleteNum = orderInfos.size();
-                        int ongoingNum = orderInfos2.size();
-                        int completeNUm = orderInfos3.size();
-                        binding.incompleteNum.setText(incompleteNum+"");
-                        binding.ongoingNum.setText(ongoingNum+"");
-                        binding.completedNum.setText(completeNUm+"");
-                    }
-                }
-            });
+            loadData();
         }
     }
 
@@ -217,9 +229,7 @@ public class LossActivity extends BaseActivity implements View.OnClickListener {
     public void onMessageEvent(MessageEvent event){
         switch (event.what){
             case BusinessType.UPDATA_ONGOING:
-                List<LossOrderInfo> orderInfos2 = LitePal.where("BB_STATE = ? or BB_STATE = ? or BB_STATE = ?", "1", "3", "4").find(LossOrderInfo.class);
-                int ongoingNum = orderInfos2.size();
-                binding.ongoingNum.setText(ongoingNum+"");
+                loadViewCount();
                 break;
         }
     }
@@ -229,5 +239,5 @@ public class LossActivity extends BaseActivity implements View.OnClickListener {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
-    
+
 }

@@ -1,6 +1,5 @@
 package com.nti.lib_common.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 

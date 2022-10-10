@@ -9,10 +9,12 @@ import com.nti.lib_common.R;
 
 /**
  * @author: weiqiyuan
- * @date: 2022/7/29
+ * @date: 2022/7/20
  * @describe
  */
 public class BaseActivity extends AppCompatActivity {
+
+    
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

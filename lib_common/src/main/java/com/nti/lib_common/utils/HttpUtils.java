@@ -23,7 +23,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * @author: weiqiyuan
- * @date: 2022/7/29
+ * @date: 2022/7/27
  * @describe
  */
 public class HttpUtils {
@@ -60,19 +60,24 @@ public class HttpUtils {
         try {
             SSLContext sslContext = SSLContext.getInstance("SSL");
             sslContext.init(null, new TrustManager[]{trustManager}, new SecureRandom());
-            mBuilder = new OkHttpClient.Builder()
-                    .connectTimeout(30, TimeUnit.SECONDS)
-                    .writeTimeout(30, TimeUnit.SECONDS)
-                    .readTimeout(30, TimeUnit.SECONDS)
-                    .connectionSpecs(Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS))
-                    .sslSocketFactory(sslContext.getSocketFactory(), trustManager)
-                    .hostnameVerifier((s, sslSession) -> true);
+//            if (iscer){
+                mBuilder = new OkHttpClient.Builder()
+                        .connectTimeout(30, TimeUnit.SECONDS)
+                        .writeTimeout(30, TimeUnit.SECONDS)
+                        .readTimeout(30, TimeUnit.SECONDS)
+                        .addInterceptor(interceptor)
+                        .connectionSpecs(Arrays.asList(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS))
+                        .sslSocketFactory(sslContext.getSocketFactory(), trustManager)
+                        .hostnameVerifier((s, sslSession) -> true);
+                retrofit = new Retrofit.Builder()
+                        .client(mBuilder.build())
+                        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .baseUrl("https://it.nti56.com").build();
 
-            retrofit = new Retrofit.Builder()
-                    .client(mBuilder.build())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl("https://it.nti56.com").build();
+                //测试服务
+                //http://10.159.40.216:10010/
+
         }catch (Exception e){
             e.printStackTrace();
         }

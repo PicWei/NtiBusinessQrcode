@@ -24,7 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:gravity="center"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:text="@string/incomplete_tips" />
 
     <View
         android:id="@+id/view"

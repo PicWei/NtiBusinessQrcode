@@ -9,7 +9,7 @@ import android.widget.Scroller;
 
 /**
  * @author: weiqiyuan
- * @date: 2022/8/4
+ * @date: 2022/7/23
  * @describe
  */
 public class SlideItem extends LinearLayout {

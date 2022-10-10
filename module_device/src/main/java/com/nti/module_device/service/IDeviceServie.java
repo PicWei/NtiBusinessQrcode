@@ -1,6 +1,7 @@
 package com.nti.module_device.service;
 
 import com.google.gson.JsonObject;
+import com.nti.lib_common.bean.DataResult;
 import com.nti.module_device.bean.PdaRegisterParamer;
 
 import io.reactivex.Observable;
@@ -13,6 +14,7 @@ import retrofit2.http.POST;
  * @describe
  */
 public interface IDeviceServie {
-    @POST("/api/fdevelop/tool/front/runtime-server/common/transflow/executeCode/BUSSIN_PDA_LOGIN")
+    @POST("/api/fdevelop/tool/front/runtime-server/common/transflow/executeCode/INDUT_PDA_LOGIN01")
+//    @POST("/common/transflow/executeCode/INDUT_PDA_LOGIN01")
     Observable<JsonObject> register (@Body PdaRegisterParamer paramer);
 }

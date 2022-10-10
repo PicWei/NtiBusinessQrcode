@@ -9,6 +9,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.JsonObject;
 import com.nti.lib_common.bean.ArrivalInboundOrderInfo;
+import com.nti.lib_common.bean.ArrivalInboundOrderInfo;
+import com.nti.lib_common.bean.DataResult;
 import com.nti.lib_common.bean.ErrorSignReceiveParamer;
 import com.nti.lib_common.bean.Paramer;
 import com.nti.lib_common.bean.UpParamer;
@@ -25,16 +27,31 @@ import java.util.List;
  */
 public class ArrivalInboundViewModel extends AndroidViewModel {
 
-    private MutableLiveData<List<ArrivalInboundOrderInfo>> data = new MutableLiveData<>();
-    private ArrivalInboundRepo repository = new ArrivalInboundRepo();
+    private  ArrivalInboundRepo repository = new ArrivalInboundRepo();
+
+    private MutableLiveData<JsonObject> data;
+    private MutableLiveData<JsonObject> data3;
+    private MutableLiveData<DataResult<List<ArrivalInboundOrderInfo>>> data2 = new MutableLiveData<>();
 
     public ArrivalInboundViewModel(@NonNull @NotNull Application application) {
         super(application);
     }
 
-    public MutableLiveData<List<ArrivalInboundOrderInfo>> PDA_H(Paramer paramer){
-        data = repository.PDA_H(paramer);
+    public MutableLiveData<DataResult<List<ArrivalInboundOrderInfo>>> PDA_H(Paramer paramer){
+        data2 = repository.PDA_H(paramer);
+        return data2;
+    }
+
+
+
+
+    public MutableLiveData<JsonObject> updataSellListStatues(UpParamer paramer){
+        data = repository.updataSellListStatues(paramer);
         return data;
     }
 
+    public LiveData<JsonObject> errorSignReceive(ErrorSignReceiveParamer paramer){
+        data3 = repository.errorSignReceive(paramer);
+        return data3;
+    }
 }

@@ -35,12 +35,16 @@ public class ArrivalInboundOrderInfo extends LitePalSupport {
     //单据状态 0-未启动扫描 1-扫描中 2-已确认 3-未确认 4-已启动 5-已回送
     private String BB_STATE;
 
+    private String A_NO;
+
     private boolean ispressed;
 
+    private String PDA_SCANNER_IS_END;
+
     public ArrivalInboundOrderInfo(String BB_UUID, String BB_CONTRACT_NO, String BB_BT_CODE, String BB_TICKET_NO,
-                                 String BB_WS_CODE, String BB_RELATE_CONTRACT_NO, String b_NAME, String BB_INPUT_DATE,
-                                 String BB_TOTAL_ALL_NUM1, String BB_TOTAL_SCAN_NUM, String BB_TOTAL_PNUM, String BB_FLOW_NAME,
-                                 String BB_STATE) {
+                                  String BB_WS_CODE, String BB_RELATE_CONTRACT_NO, String b_NAME, String BB_INPUT_DATE,
+                                  String BB_TOTAL_ALL_NUM1, String BB_TOTAL_SCAN_NUM, String BB_TOTAL_PNUM, String BB_FLOW_NAME,
+                                  String BB_STATE, String PDA_SCANNER_IS_END) {
         this.BB_UUID = BB_UUID;
         this.BB_CONTRACT_NO = BB_CONTRACT_NO;
         this.BB_BT_CODE = BB_BT_CODE;
@@ -54,6 +58,7 @@ public class ArrivalInboundOrderInfo extends LitePalSupport {
         this.BB_TOTAL_PNUM = BB_TOTAL_PNUM;
         this.BB_FLOW_NAME = BB_FLOW_NAME;
         this.BB_STATE = BB_STATE;
+        this.PDA_SCANNER_IS_END = PDA_SCANNER_IS_END;
     }
 
     public String getBB_UUID() {
@@ -160,6 +165,14 @@ public class ArrivalInboundOrderInfo extends LitePalSupport {
         this.BB_STATE = BB_STATE;
     }
 
+    public String getA_NO() {
+        return A_NO;
+    }
+
+    public void setA_NO(String a_NO) {
+        A_NO = a_NO;
+    }
+
     public boolean isIspressed() {
         return ispressed;
     }
@@ -168,9 +181,17 @@ public class ArrivalInboundOrderInfo extends LitePalSupport {
         this.ispressed = ispressed;
     }
 
+    public String getPDA_SCANNER_IS_END() {
+        return PDA_SCANNER_IS_END;
+    }
+
+    public void setPDA_SCANNER_IS_END(String PDA_SCANNER_IS_END) {
+        this.PDA_SCANNER_IS_END = PDA_SCANNER_IS_END;
+    }
+
     @Override
     public String toString() {
-        return "SalesFactoryOrderInfo{" +
+        return "LossOrderInfo{" +
                 "BB_UUID='" + BB_UUID + '\'' +
                 ", BB_CONTRACT_NO='" + BB_CONTRACT_NO + '\'' +
                 ", BB_BT_CODE='" + BB_BT_CODE + '\'' +
@@ -184,7 +205,10 @@ public class ArrivalInboundOrderInfo extends LitePalSupport {
                 ", BB_FLOW_NAME='" + BB_FLOW_NAME + '\'' +
                 ", BB_TOTAL_PNUM='" + BB_TOTAL_PNUM + '\'' +
                 ", BB_STATE='" + BB_STATE + '\'' +
+                ", A_NO='" + A_NO + '\'' +
                 ", ispressed=" + ispressed +
+                ", PDA_SCANNER_IS_END='" + PDA_SCANNER_IS_END + '\'' +
                 '}';
     }
+
 }

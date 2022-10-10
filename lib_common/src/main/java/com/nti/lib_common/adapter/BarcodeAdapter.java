@@ -3,13 +3,21 @@ package com.nti.lib_common.adapter;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.nti.lib_common.R;
+import com.nti.lib_common.view.SlideItem;
+
+
+import org.litepal.LitePal;
+
+import java.util.List;
 
 /**
  * @author: weiqiyuan
- * @date: 2022/8/4
+ * @date: 2022/7/24
  * @describe
  */
 public class BarcodeAdapter {

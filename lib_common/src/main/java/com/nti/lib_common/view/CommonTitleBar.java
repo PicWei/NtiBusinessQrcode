@@ -18,7 +18,7 @@ import com.nti.lib_common.databinding.CommonTitleBarBinding;
 
 /**
  * @author: weiqiyuan
- * @date: 2022/7/29
+ * @date: 2022/7/20
  * @describe
  */
 public class CommonTitleBar extends ConstraintLayout {

@@ -1,8 +1,13 @@
 package com.nti.lib_common.bean;
 
+import android.graphics.Bitmap;
+
+import java.io.File;
+import java.util.HashMap;
+
 /**
  * @author: weiqiyuan
- * @date: 2022/8/1
+ * @date: 2022/7/24
  * @describe
  */
 public class MessageEvent {

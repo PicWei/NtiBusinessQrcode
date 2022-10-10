@@ -2,7 +2,7 @@ package com.nti.lib_common.bean;
 
 /**
  * @author: weiqiyuan
- * @date: 2022/8/1
+ * @date: 2022/8/2
  * @describe
  */
 public class UpdataStatuesParamer {
